@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+   	<bean id="sequenceTable" class="org.esbuilder.sequence.SequenceTable">
+   	    <property name="dataSource" ref="dataSource"/>
+		<property name="tableName" value="Core_SeqNo"/>
+		<property name="typeColName" value="seqType"/>
+		<property name="valueColName" value="seqValue"/>
+		<!--param name="rangeColName">range</param-->
+	</bean>
+	<!-- 商户编号 -->
+	<bean id="mCodeFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="{yyyyMMdd}{######}"/>
+		<property name="sequenceType" value="mCode"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	<!-- 品牌编号 -->
+	<bean id="brandCodeFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="BRAND{######}"/>
+		<property name="sequenceType" value="brandCode"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	
+	<!-- 优惠券编号 -->
+	<bean id="couponCodeFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="COUPON{########}"/>
+		<property name="sequenceType" value="couponCode"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	
+	<!-- 优惠券发布编号 -->
+	<bean id="couponReleaseCodeFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="CR{########}"/>
+		<property name="sequenceType" value="couponReleaseCode"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	
+	<bean id="brandshopCodeFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="top{yyyyMMdd}{####}"/>
+		<property name="sequenceType" value="brandshopCode"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	<!-- 导购员登录帐号 -->
+	<bean id="brandshopUserCodeFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="{yyyyMMdd}{####}"/>
+		<property name="sequenceType" value="brandshopUserCode"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	
+	<bean id="productCodeFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="PROD{##########}"/>
+		<property name="sequenceType" value="productCode"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	
+	<bean id="skuCodeFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="SKU{##########}"/>
+		<property name="sequenceType" value="skuCode"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	
+	<bean id="orderIdFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="{yyyyMMdd}{######}"/>
+		<property name="sequenceType" value="orderId"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	
+	<bean id="cartCookieIdFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="CT{##########}"/>
+		<property name="sequenceType" value="cartCookieId"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+
+	
+	<bean id="historyCookieIdFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="MH{##########}"/>
+		<property name="sequenceType" value="searchHistory"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+
+	
+	<bean id="searchHistoryCookieIdFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="SH{##########}"/>
+		<property name="sequenceType" value="searchCookieId"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	
+	<bean id="deliveryCodeFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="DC{##########}"/>
+		<property name="sequenceType" value="searchCookieId"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+	
+	<!-- 淘璞账户充值编号 -->
+	<bean id="topAccountCodeFactory" class="org.esbuilder.sequence.StepableTableSequenceFactory">
+		<property name="sequenceTable" ref="sequenceTable"/>
+		<property name="sequencePattern" value="{MMdd}{######}"/>
+		<property name="sequenceType" value="searchCookieId"/>
+		<property name="stepSize" value="50"/>
+	</bean>
+
+</beans>

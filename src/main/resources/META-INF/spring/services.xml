@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <aop:aspectj-autoproxy/>
+    <context:annotation-config/>
+
+    <bean id="resourceLoader" class="org.springframework.core.io.DefaultResourceLoader"/>
+
+    <!-- 主数据库配置 -->
+    <tx:annotation-driven transaction-manager="txManager"/>
+
+    <bean id="txManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+          primary="true">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="transactionTemplate"
+          class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="txManager"/>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+        <property name="maxIdle" value="${jdbc.maxIdle}"/>
+        <property name="minIdle" value="${jdbc.minIdle}"/>
+        <property name="testOnBorrow" value="${jdbc.testOnBorrow}"/>
+        <property name="validationQuery" value="${jdbc.validationQuery}"/>
+    </bean>
+
+    <bean id="sqlSessionFactory"
+          class="org.esbuilder.spring.orm.mybatis.session.ConfigurableSqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configurationScanner" ref="configurationScanner"/>
+    </bean>
+
+    <bean id="configurationScanner"
+          class="org.esbuilder.spring.orm.mybatis.session.MybatisConfigurationScanner">
+        <property name="defaultMapperLocations"
+                  value="classpath*:META-INF/models/*Mapper.xml,classpath*:META-INF/models/${db.type}/**/*Mapper.xml"/>
+    </bean>
+
+    <bean id="baseDaoMapper" class="org.mybatis.spring.mapper.MapperFactoryBean"
+          abstract="true" lazy-init="false">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <!-- restful 数据库配置 -->
+    <tx:annotation-driven transaction-manager="restTXManager"/>
+
+    <bean id="restTXManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="restDataSource"/>
+    </bean>
+
+    <bean id="restTransactionTemplate"
+          class="org.springframework.transaction.support.TransactionTemplate">
+        <property name="transactionManager" ref="restTXManager"/>
+    </bean>
+
+    <bean id="restConfigurationScanner"
+          class="org.esbuilder.spring.orm.mybatis.session.MybatisConfigurationScanner">
+        <property name="defaultMapperLocations"
+                  value="classpath*:META-INF/mapper/*.xml"/>
+    </bean>
+
+    <bean id="restSqlSessionFactory" class="org.esbuilder.spring.orm.mybatis.session.ConfigurableSqlSessionFactoryBean">
+        <property name="dataSource" ref="restDataSource"/>
+        <property name="configurationScanner" ref="restConfigurationScanner"/>
+    </bean>
+
+    <bean id="restBaseDaoMapper" class="org.mybatis.spring.mapper.MapperFactoryBean"
+          abstract="true" lazy-init="false">
+        <property name="sqlSessionFactory" ref="restSqlSessionFactory"/>
+    </bean>
+
+    <bean id="restDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.rest.url}"/>
+        <property name="username" value="${jdbc.rest.username}"/>
+        <property name="password" value="${jdbc.rest.password}"/>
+        <property name="initialSize" value="${jdbc.initialSize}"/>
+        <property name="maxActive" value="${jdbc.maxActive}"/>
+        <property name="maxIdle" value="${jdbc.maxIdle}"/>
+        <property name="minIdle" value="${jdbc.minIdle}"/>
+    </bean>
+
+</beans>

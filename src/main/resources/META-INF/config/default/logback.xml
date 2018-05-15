@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 日志配置 -->
+<configuration>
+	<jmxConfigurator />
+	<!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 -->
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoding>UTF-8</encoding>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern><![CDATA[
+			%date{yy-MM-dd HH:mm:ss.SSS} [%level] %logger [%M][%L] %msg%n
+			]]></pattern>
+		</layout>
+	</appender>
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoding>UTF-8</encoding>
+		<!-- 指定日志文件的名称 <file>${compilePath}/exam.log</file> -->
+		<file>${catalina.home}/logs/restful.log</file>
+		<!-- Support multiple-JVM writing to the same log file -->
+		<prudent>true</prudent>
+		<!-- 滚动时产生的文件的存放位置及文件名称 %d{yyyy-MM-dd}：按天进行日志滚动 %i：当文件大小超过maxFileSize时，按照i进行文件滚动
+			当使用tomcat配置时,修改$(user.dir)为${catalina.base}。获取绝对路径。 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>${catalina.home}/logs/restful/bss.%d{MMdd}.%i.log</fileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>35MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>
+			<![CDATA[
+			%date{yy-MM-dd HH:mm:ss.SSS}[%thread] %-5level%X{remoteIp}-%logger{30} [%M][%L]--%msg%n
+			]]>
+			</pattern>
+		</layout>
+	</appender>
+
+	<logger name="java.sql" level="DEBUG" />
+	<logger name="org.mybatis" level="INFO"/>
+
+	<root>
+		<level value="INFO" />
+		<appender-ref ref="stdout" />
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>
+
